@@ -17,8 +17,9 @@ export default createMuiTheme({
   typography: {
     // h3:{fontWeight:500},
     tab: {
-      fontFamily: "Poppins",
-      fontSize: "1rem",
+      fontFamily: "Roboto",
+      fontSize: "16px",
+      fontWeight: "400",
       textTransform: "none",
       color: "white",
     },

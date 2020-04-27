@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {
   AppBar,
-  Toolbar,
   useScrollTrigger,
   Slide,
   Tabs,
   Tab,
   Button,
-  Menu,
   MenuItem,
   useMediaQuery,
   SwipeableDrawer,
@@ -15,47 +13,62 @@ import {
   List,
   ListItem,
   ListItemText,
+  Container,
+  Grid,
+  ClickAwayListener,
+  Grow,
+  Paper,
+  Popper,
+  MenuList,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useTheme } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
+import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 
 const useStyles = makeStyles((theme) => ({
   toolbarMargin: {
     ...theme.mixins.toolbar,
-    marginBottom: "3em",
-    [theme.breakpoints.down("sm")]: { marginBottom: "2em" },
-    [theme.breakpoints.down("xs")]: { marginBottom: "1em" },
+    marginBottom: "2rem",
+    [theme.breakpoints.down("sm")]: { marginBottom: ".7rem" },
+    [theme.breakpoints.down("xs")]: { marginBottom: ".5rem" },
   },
   logo: {
-    height: "6em",
-    [theme.breakpoints.down("sm")]: { height: "5em" },
-    [theme.breakpoints.down("xs")]: { height: "4em" },
+    height: "3.25em",
+    [theme.breakpoints.down("sm")]: { height: "2rem" },
   },
-  tabContainer: {
-    marginLeft: "auto",
+  tabContainer: {},
+  tab: {
+    ...theme.typography.tab,
+    minWidth: 8,
+    opacity: 1,
+    "&:hover": { opacity: 0.8 },
   },
-  tab: { ...theme.typography.tab, minWidth: 10, marginLeft: "25px" },
   menu: {
     backgroundColor: theme.palette.common.blue,
     borderRadius: "0px",
+    zIndex: 1302,
   },
   menuItem: {
     ...theme.typography.tab,
-    opacity: 0.7,
-    "&:hover": { opacity: 1 },
+    opacity: 1,
+    "&:hover": { opacity: 0.8 },
   },
   drawerIconContainer: {
     "&:hover": { backgroundColor: "transparent" },
     marginLeft: "auto",
   },
-  drawerIcon: { height: "50px", width: "50px" },
-  drawer: { backgroundColor: theme.palette.common.blue },
-  drawerItemText: { ...theme.typography.tab, opacity: 0.7 },
-  drawerItemSelectedText: { "& .MuiListItemText-root": { opacity: 1 } },
+  drawerIcon: { height: "40px", width: "40px" },
+  drawer: { backgroundColor: theme.palette.common.blue, minWidth: "30vw" },
+  drawerItemText: { ...theme.typography.tab, opacity: 1 },
+  drawerItemSelectedText: { "& .MuiListItemText-root": { opacity: 0.8 } },
   appbar: { zIndex: theme.zIndex.modal + 1 },
+  container: {
+    minHeight: "5.5rem",
+    [theme.breakpoints.down("sm")]: { minHeight: "3rem" },
+  },
 }));
 
 function HideOnScroll(props) {
@@ -66,14 +79,13 @@ function HideOnScroll(props) {
 
 export default function Header(props) {
   const classes = useStyles();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down("sm"));
+  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [openMenu, setOpenMenu] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
-
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down("sm"));
-  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   const handleChange = (e, newValue) => {
     props.setValue(newValue);
@@ -93,27 +105,29 @@ export default function Header(props) {
     setOpenMenu(false);
     props.setSelectedIndex(i);
   };
+  function handleListKeyDown(event) {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setOpenMenu(false);
+    }
+  }
 
   const menuOptions = [
-    { name: "Projects", link: "/projects", activeIndex: 3, selectedIndex: 0 },
-    { name: "Project 1", link: "/project1", activeIndex: 3, selectedIndex: 1 },
-    { name: "Project 2", link: "/project2", activeIndex: 3, selectedIndex: 2 },
-    { name: "Project 3", link: "/project3", activeIndex: 3, selectedIndex: 3 },
+    { name: "Tester", link: "/tester", activeIndex: 1, selectedIndex: 0 },
+    { name: "Developer", link: "/developer", activeIndex: 1, selectedIndex: 1 },
   ];
 
   const routes = [
-    { name: "Home", link: "/", activeIndex: 0 },
-    { name: "Training", link: "/training", activeIndex: 1 },
-    { name: "Skills", link: "/skills", activeIndex: 2 },
+    { name: "About Us", link: "/about-us", activeIndex: 0 },
     {
-      name: "Projects",
-      link: "/projects",
-      activeIndex: 3,
-      ariaOwns: anchorEl ? "projects-menu" : undefined,
+      name: "Courses",
+      activeIndex: 1,
+      ariaOwns: anchorEl ? "courses-menu" : undefined,
       ariaHaspopup: anchorEl ? "true" : undefined,
       onMouseOver: (e) => handleClick(e),
     },
-    { name: "Contact", link: "/contact", activeIndex: 4 },
+    { name: "Our Teachers", link: "/our-teachers", activeIndex: 2 },
+    { name: "Our Students", link: "/our-students", activeIndex: 3 },
   ];
 
   const tabs = (
@@ -135,32 +149,48 @@ export default function Header(props) {
           />
         ))}
       </Tabs>
-
-      <Menu
-        style={{ zIndex: 1302 }}
-        classes={{ paper: classes.menu }}
-        elevation={0}
-        id="projects-menu"
-        anchorEl={anchorEl}
+      <Popper
         open={openMenu}
-        onClose={handleClose}
-        MenuListProps={{ onMouseLeave: handleClose }}>
-        {menuOptions.map((option, i) => (
-          <MenuItem
-            classes={{ root: classes.menuItem }}
-            selected={i === props.selectedIndex && props.value === 3}
-            key={`${option}${i}`}
-            component={Link}
-            to={option.link}
-            onClick={(e) => {
-              handleMenuItemClick(e, i);
-              props.setValue(3);
-              handleClose();
+        anchorEl={anchorEl}
+        role={undefined}
+        placement="bottom-start"
+        transition
+        disablePortal>
+        {({ TransitionProps }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin: "bottom-end",
             }}>
-            {option.name}
-          </MenuItem>
-        ))}
-      </Menu>
+            <Paper classes={{ root: classes.menu }} elevation={0}>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList
+                  onMouseLeave={handleClose}
+                  disablePadding
+                  autoFocusItem={false}
+                  id="simple-menu"
+                  onKeyDown={handleListKeyDown}>
+                  {menuOptions.map((option, i) => (
+                    <MenuItem
+                      classes={{ root: classes.menuItem }}
+                      selected={i === props.selectedIndex && props.value === 1}
+                      key={`${option}${i}`}
+                      component={Link}
+                      to={option.link}
+                      onClick={(e) => {
+                        handleMenuItemClick(e, i);
+                        props.setValue(1);
+                        handleClose();
+                      }}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
     </>
   );
 
@@ -170,7 +200,8 @@ export default function Header(props) {
         disableBackdropTransition={!iOS}
         disableDiscovery={iOS}
         open={openDrawer}
-        onOpen={() => setOpenDrawer(!openDrawer)}
+        onOpen={() => setOpenDrawer(true)}
+        onClose={() => setOpenDrawer(false)}
         classes={{ paper: classes.drawer }}>
         <List disablePadding>
           <div className={classes.toolbarMargin} />
@@ -198,7 +229,11 @@ export default function Header(props) {
         onClick={() => setOpenDrawer(!openDrawer)}
         disableRipple
         className={classes.drawerIconContainer}>
-        <MenuIcon className={classes.drawerIcon} />
+        {openDrawer ? (
+          <MenuOpenIcon className={classes.drawerIcon} />
+        ) : (
+          <MenuIcon className={classes.drawerIcon} />
+        )}
       </IconButton>
     </>
   );
@@ -227,12 +262,26 @@ export default function Header(props) {
     <>
       <HideOnScroll>
         <AppBar className={classes.appbar}>
-          <Toolbar>
-            <Button component={Link} to="/" onClick={() => props.setValue(0)}>
-              <img src={logo} alt="logo" className={classes.logo} />
-            </Button>
-            {matches ? drawer : tabs}
-          </Toolbar>
+          <Container>
+            <Grid
+              container
+              justify="space-around"
+              alignItems="center"
+              className={classes.container}>
+              <Grid item>
+                <Button
+                  component={Link}
+                  to="/landing"
+                  onClick={() => props.setValue(0)}>
+                  <img src={logo} alt="logo" className={classes.logo} />
+                </Button>
+              </Grid>
+              <Grid item>{matches ? drawer : tabs}</Grid>
+              <Grid item>
+                <Button>Login</Button>
+              </Grid>
+            </Grid>
+          </Container>
         </AppBar>
       </HideOnScroll>
       <div className={classes.toolbarMargin} />

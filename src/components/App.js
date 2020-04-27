@@ -23,27 +23,15 @@ function App() {
           setSelectedIndex={setSelectedIndex}
         />
         <Switch>
-          <Route exact path="/" component={() => <div style={{ minHeight: "100vh" }}>Home</div>} />
-          <Route exact path="/training" component={() => <div style={{ minHeight: "100vh" }}>Training</div>} />
-          <Route exact path="/skills" component={() => <div style={{ minHeight: "100vh" }}>Skills</div>} />
-          <Route exact path="/projects" component={() => <div style={{ minHeight: "100vh" }}>Projects</div>} />
-          <Route
-            exact
-            path="/project1"
-            component={() => <div style={{ minHeight: "100vh" }}>Project 1</div>}
-          />
-          <Route
-            exact
-            path="/project2"
-            component={() => <div style={{ minHeight: "100vh" }}>Project 2</div>}
-          />
-          <Route
-            exact
-            path="/project3"
-            component={() => <div style={{ minHeight: "100vh" }}>Project 3</div>}
-          />
+          <Route exact path="/landing" component={() => <div style={{ minHeight: "100vh" }}><p>Landing</p></div>} />
+          <Route exact path="/about-us" component={() => <div style={{ minHeight: "100vh" }}><p>About Us</p></div>} />
+          <Route exact path="/tester" component={() => <div style={{ minHeight: "100vh" }}>Tester</div>} />
+          <Route exact path="/developer" component={() => <div style={{ minHeight: "100vh" }}>Developer</div>} />
+          <Route exact path="/our-teachers" component={() => <div style={{ minHeight: "100vh" }}>Our Teachers</div>} />
+          <Route exact path="/our-students" component={() => <div style={{ minHeight: "100vh" }}>Our Students</div>} />
           <Route exact path="/contact" component={() => <div style={{ minHeight: "100vh" }}>Contact</div>} />
         </Switch>
+  
         <Footer
           value={value}
           setValue={setValue}
@@ -51,8 +39,6 @@ function App() {
           setSelectedIndex={setSelectedIndex}
         />
       </BrowserRouter>
-      {/* {[...new Array(2222)].map(() => `In vino veritas `)} */}
-      {/* Welcome to SkillTransfers learning! */}
     </ThemeProvider>
   );
 }
