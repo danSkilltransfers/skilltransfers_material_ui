@@ -1,10 +1,12 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import logo from "../../assets/logo.svg";
-import facebook from "../../assets/logo-facebook.svg";
-import github from "../../assets/logo-github.svg";
-import linkedin from "../../assets/logo-linkedin.svg";
-import wordpress from "../../assets/logo-wordpress.svg";
+
+import logo from "../../../assets/logo.svg";
+import facebook from "../../../assets/logo-facebook.svg";
+import github from "../../../assets/logo-github.svg";
+import linkedin from "../../../assets/logo-linkedin.svg";
+import wordpress from "../../../assets/logo-wordpress.svg";
+
 
 import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
@@ -14,7 +16,7 @@ import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   footer: { backgroundColor: theme.palette.common.blue, width: "100%" },
   privacy: {
-    backgroundColor: theme.palette.common.darkBlue,
+    backgroundColor: theme.palette.common.darkblue,
   },
   copyright: {
     fontSize: "1em",

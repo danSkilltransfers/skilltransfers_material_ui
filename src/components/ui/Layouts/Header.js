@@ -20,13 +20,15 @@ import {
   Paper,
   Popper,
   MenuList,
+  Box,
+  Hidden,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useTheme } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import { Link } from "react-router-dom";
-import logo from "../../assets/logo.svg";
+import logo from "../../../assets/logo.svg";
 
 const useStyles = makeStyles((theme) => ({
   toolbarMargin: {
@@ -69,6 +71,16 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "5.5rem",
     [theme.breakpoints.down("sm")]: { minHeight: "3rem" },
   },
+  button: {
+    border: "1px solid ",
+    borderColor: theme.palette.common.lightblue,
+    borderRadius: "40px",
+    backgroundColor: theme.palette.common.white,
+    padding: "4px 16px",
+    color: theme.palette.common.lightblue,
+    textTransform: "none",
+    "&:hover": { color: theme.palette.common.white },
+  },
 }));
 
 function HideOnScroll(props) {
@@ -86,9 +98,11 @@ export default function Header(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openMenu, setOpenMenu] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [openBanner, setOpenBanner] = useState(false);
 
   const handleChange = (e, newValue) => {
     props.setValue(newValue);
+    setOpenBanner(false);
   };
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -103,6 +117,7 @@ export default function Header(props) {
   const handleMenuItemClick = (e, i) => {
     setAnchorEl(null);
     setOpenMenu(false);
+    setOpenBanner(true);
     props.setSelectedIndex(i);
   };
   function handleListKeyDown(event) {
@@ -168,7 +183,7 @@ export default function Header(props) {
                   onMouseLeave={handleClose}
                   disablePadding
                   autoFocusItem={false}
-                  id="simple-menu"
+                  id="courses-menu"
                   onKeyDown={handleListKeyDown}>
                   {menuOptions.map((option, i) => (
                     <MenuItem
@@ -225,16 +240,6 @@ export default function Header(props) {
           ))}
         </List>
       </SwipeableDrawer>
-      <IconButton
-        onClick={() => setOpenDrawer(!openDrawer)}
-        disableRipple
-        className={classes.drawerIconContainer}>
-        {openDrawer ? (
-          <MenuOpenIcon className={classes.drawerIcon} />
-        ) : (
-          <MenuIcon className={classes.drawerIcon} />
-        )}
-      </IconButton>
     </>
   );
 
@@ -263,22 +268,49 @@ export default function Header(props) {
       <HideOnScroll>
         <AppBar className={classes.appbar}>
           <Container>
-            <Grid
-              container
-              justify="space-around"
-              alignItems="center"
-              className={classes.container}>
+            <Grid container direction="column">
               <Grid item>
-                <Button
-                  component={Link}
-                  to="/landing"
-                  onClick={() => props.setValue(0)}>
-                  <img src={logo} alt="logo" className={classes.logo} />
-                </Button>
+                <Grid
+                  container
+                  justify="space-around"
+                  alignItems="center"
+                  className={classes.container}>
+                  <Grid item>
+                    <Hidden mdUp>
+                      <IconButton
+                        onClick={() => setOpenDrawer(!openDrawer)}
+                        disableRipple
+                        className={classes.drawerIconContainer}>
+                        {openDrawer ? (
+                          <MenuOpenIcon className={classes.drawerIcon} />
+                        ) : (
+                          <MenuIcon className={classes.drawerIcon} />
+                        )}
+                      </IconButton>
+                    </Hidden>
+                    <Button
+                      component={Link}
+                      to="/landing"
+                      onClick={() => props.setValue(0)}>
+                      <img src={logo} alt="logo" className={classes.logo} />
+                    </Button>
+                  </Grid>
+                  <Grid item>{matches ? drawer : tabs}</Grid>
+                  <Grid item>
+                    <Button className={classes.button} variant="outlined">
+                      Sign In
+                    </Button>
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item>{matches ? drawer : tabs}</Grid>
+
               <Grid item>
-                <Button>Login</Button>
+                <Box
+                  component="div"
+                  visibility="visible"
+                  display={openBanner ? "block" : "none"}>
+                  Banner
+                </Box>
               </Grid>
             </Grid>
           </Container>
