@@ -64,7 +64,11 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerIcon: { height: "40px", width: "40px" },
   drawer: { backgroundColor: theme.palette.common.blue, minWidth: "30vw" },
-  drawerItemText: { ...theme.typography.tab, opacity: 1 },
+  drawerItemText: {
+    ...theme.typography.tab,
+    opacity: 1,
+    "&:hover": { opacity: 0.8 },
+  },
   drawerItemSelectedText: { "& .MuiListItemText-root": { opacity: 0.8 } },
   appbar: { zIndex: theme.zIndex.modal + 1 },
   container: {
@@ -220,24 +224,30 @@ export default function Header(props) {
         classes={{ paper: classes.drawer }}>
         <List disablePadding>
           <div className={classes.toolbarMargin} />
-          {routes.map((route) => (
-            <ListItem
-              key={`${route}${route.activeIndex}`}
-              button
-              divider
-              component={Link}
-              to={route.link}
-              selected={props.value === route.activeIndex}
-              classes={{ selected: classes.drawerItemSelectedText }}
-              onClick={() => {
-                setOpenDrawer(false);
-                props.setValue(route.activeIndex);
-              }}>
-              <ListItemText className={classes.drawerItemText}>
-                {route.name}
-              </ListItemText>
-            </ListItem>
-          ))}
+          {[...routes, ...menuOptions]
+            .sort((a, b) => a.activeIndex - b.activeIndex)
+            .map((route) => (
+              <ListItem
+                key={`${route}${route.activeIndex}${route.selectedIndex}`}
+                button
+                divider
+                component={Link}
+                to={route.link}
+                selected={
+                  props.value === route.activeIndex &&
+                  props.selectedIndex === route.selectedIndex
+                }
+                classes={{ selected: classes.drawerItemSelectedText }}
+                onClick={() => {
+                  setOpenDrawer(false);
+                  props.setValue(route.activeIndex);
+                  props.setSelectedIndex(route.selectedIndex);
+                }}>
+                <ListItemText className={classes.drawerItemText}>
+                  {route.name}
+                </ListItemText>
+              </ListItem>
+            ))}
         </List>
       </SwipeableDrawer>
     </>
