@@ -22,13 +22,17 @@ import {
   MenuList,
   Box,
   Hidden,
+  Typography,
+  TextField,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useTheme } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import { Link } from "react-router-dom";
+
 import logo from "../../../assets/logo.svg";
+import imageGroup from "../../../assets/imageGroup.png";
 
 const useStyles = makeStyles((theme) => ({
   toolbarMargin: {
@@ -41,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
     height: "3.25em",
     [theme.breakpoints.down("sm")]: { height: "2rem" },
   },
-  tabContainer: {},
   tab: {
     ...theme.typography.tab,
     minWidth: 8,
@@ -70,20 +73,49 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": { opacity: 0.8 },
   },
   drawerItemSelectedText: { "& .MuiListItemText-root": { opacity: 0.8 } },
-  appbar: { zIndex: theme.zIndex.modal + 1 },
+  appbar: {
+    zIndex: theme.zIndex.modal + 1,
+    background: theme.palette.common.bannerblue,
+  },
   container: {
-    minHeight: "5.5rem",
+    minHeight: "6rem",
     [theme.breakpoints.down("sm")]: { minHeight: "3rem" },
   },
   button: {
-    border: "1px solid ",
-    borderColor: theme.palette.common.lightblue,
+    border: `1px solid ${theme.palette.common.lightblue}`,
     borderRadius: "40px",
     backgroundColor: theme.palette.common.white,
     padding: "4px 16px",
     color: theme.palette.common.lightblue,
     textTransform: "none",
-    "&:hover": { color: theme.palette.common.white },
+    "&:hover": {
+      color: theme.palette.common.white,
+      backgroundColor: theme.palette.common.darkblue,
+    },
+  },
+  banner: {
+    height: "28.5rem",
+  },
+  leftColumn: {
+    width: "100%",
+    height: "100%",
+  },
+  textfield: {
+    backgroundColor: theme.palette.common.white,
+    width: "15rem",
+    height: "4rem",
+    borderRadius: "3px",
+  },
+  bannerbutton: {
+    width: "12rem",
+    height: "4rem",
+    background: theme.palette.common.lightblue,
+    "&:hover": { background: theme.palette.common.darkblue },
+    borderRadius: "3px",
+    textTransform: "none",
+    fontFamily: "Poppins",
+    fontWeight: "500",
+    fontSize: "20px",
   },
 }));
 
@@ -151,13 +183,10 @@ export default function Header(props) {
 
   const tabs = (
     <>
-      <Tabs
-        className={classes.tabContainer}
-        value={props.value}
-        onChange={handleChange}>
+      <Tabs value={props.value} onChange={handleChange}>
         {routes.map((route) => (
           <Tab
-            key={`${route}`}
+            key={`${route.name}`}
             className={classes.tab}
             label={route.name}
             component={Link}
@@ -282,7 +311,7 @@ export default function Header(props) {
               <Grid item>
                 <Grid
                   container
-                  justify="space-around"
+                  justify="space-between"
                   alignItems="center"
                   className={classes.container}>
                   <Grid item>
@@ -319,7 +348,49 @@ export default function Header(props) {
                   component="div"
                   visibility="visible"
                   display={openBanner ? "block" : "none"}>
-                  Banner
+                  <Grid
+                    container
+                    className={classes.banner}
+                    justify="space-between"
+                    direction="row">
+                    <Grid item md={6}>
+                      <Grid
+                        container
+                        direction="column"
+                        justify="center"
+                        alignItems="flex-start"
+                        spacing={5}
+                        className={classes.leftColumn}>
+                        <Grid item>
+                          <Typography variant="h3">
+                            <b>Skilltransfers</b> delivers <b>In-Person</b>{" "}
+                            training for ambitious <b>Full Stack Tester</b>
+                          </Typography>
+                        </Grid>
+
+                        <Grid item>
+                          <form noValidate autoComplete="off">
+                            <TextField
+                              InputProps={{ disableUnderline: true }}
+                              id="outlined-basic"
+                              size="medium"
+                              className={classes.textfield}
+                            />
+                            <Button
+                              color="inherit"
+                              size="large"
+                              className={classes.bannerbutton}>
+                              Find Your Skill
+                            </Button>
+                          </form>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+
+                    <Grid item md={6}>
+                      <img src={imageGroup} alt="banner" />
+                    </Grid>
+                  </Grid>
                 </Box>
               </Grid>
             </Grid>
