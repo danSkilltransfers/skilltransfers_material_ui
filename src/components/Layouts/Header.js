@@ -31,8 +31,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import { Link } from "react-router-dom";
 
-import logo from "../../../assets/logo.svg";
-import imageGroup from "../../../assets/imageGroup.png";
+import logo from "../../assets/logo.svg";
+import imageGroup from "../../assets/imageGroup.png";
 
 const useStyles = makeStyles((theme) => ({
   toolbarMargin: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("xs")]: { marginBottom: ".5rem" },
   },
   logo: {
-    height: "3.25em",
+    height: "3em",
     [theme.breakpoints.down("sm")]: { height: "2rem" },
   },
   tab: {
@@ -63,7 +63,6 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerIconContainer: {
     "&:hover": { backgroundColor: "transparent" },
-    marginLeft: "auto",
   },
   drawerIcon: { height: "40px", width: "40px" },
   drawer: { backgroundColor: theme.palette.common.blue, minWidth: "30vw" },
@@ -75,13 +74,12 @@ const useStyles = makeStyles((theme) => ({
   drawerItemSelectedText: { "& .MuiListItemText-root": { opacity: 0.8 } },
   appbar: {
     zIndex: theme.zIndex.modal + 1,
-    background: theme.palette.common.bannerblue,
   },
-  container: {
-    minHeight: "6rem",
+  maincontainer: {
+    minHeight: "5rem",
     [theme.breakpoints.down("sm")]: { minHeight: "3rem" },
   },
-  button: {
+  signinbutton: {
     border: `1px solid ${theme.palette.common.lightblue}`,
     borderRadius: "40px",
     backgroundColor: theme.palette.common.white,
@@ -94,23 +92,21 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   banner: {
-    height: "28.5rem",
+    height: "30rem",
   },
-  leftColumn: {
-    width: "100%",
-    height: "100%",
-  },
+
   textfield: {
     backgroundColor: theme.palette.common.white,
-    width: "15rem",
+    width: "100%",
     height: "4rem",
     borderRadius: "3px",
   },
   bannerbutton: {
-    width: "12rem",
+    width: "10rem",
     height: "4rem",
     background: theme.palette.common.lightblue,
     "&:hover": { background: theme.palette.common.darkblue },
+    color: theme.palette.common.white,
     borderRadius: "3px",
     textTransform: "none",
     fontFamily: "Poppins",
@@ -172,6 +168,7 @@ export default function Header(props) {
     { name: "About Us", link: "/about-us", activeIndex: 0 },
     {
       name: "Courses",
+      link: "/courses",
       activeIndex: 1,
       ariaOwns: anchorEl ? "courses-menu" : undefined,
       ariaHaspopup: anchorEl ? "true" : undefined,
@@ -296,6 +293,9 @@ export default function Header(props) {
             }
           }
           break;
+        case "/landing":
+          props.setValue(5);
+          break;
         default:
           break;
       }
@@ -308,38 +308,37 @@ export default function Header(props) {
         <AppBar className={classes.appbar}>
           <Container>
             <Grid container direction="column">
-              <Grid item>
-                <Grid
-                  container
-                  justify="space-between"
-                  alignItems="center"
-                  className={classes.container}>
-                  <Grid item>
-                    <Hidden mdUp>
-                      <IconButton
-                        onClick={() => setOpenDrawer(!openDrawer)}
-                        disableRipple
-                        className={classes.drawerIconContainer}>
-                        {openDrawer ? (
-                          <MenuOpenIcon className={classes.drawerIcon} />
-                        ) : (
-                          <MenuIcon className={classes.drawerIcon} />
-                        )}
-                      </IconButton>
-                    </Hidden>
-                    <Button
-                      component={Link}
-                      to="/landing"
-                      onClick={() => props.setValue(0)}>
-                      <img src={logo} alt="logo" className={classes.logo} />
-                    </Button>
-                  </Grid>
-                  <Grid item>{matches ? drawer : tabs}</Grid>
-                  <Grid item>
-                    <Button className={classes.button} variant="outlined">
-                      Sign In
-                    </Button>
-                  </Grid>
+              <Grid
+                item
+                container
+                justify="space-around"
+                alignItems="center"
+                className={classes.maincontainer}>
+                <Grid item>
+                  <Hidden mdUp>
+                    <IconButton
+                      onClick={() => setOpenDrawer(!openDrawer)}
+                      disableRipple
+                      className={classes.drawerIconContainer}>
+                      {openDrawer ? (
+                        <MenuOpenIcon className={classes.drawerIcon} />
+                      ) : (
+                        <MenuIcon className={classes.drawerIcon} />
+                      )}
+                    </IconButton>
+                  </Hidden>
+                  <Button
+                    component={Link}
+                    to="/landing"
+                    onClick={() => props.setValue(5)}>
+                    <img src={logo} alt="logo" className={classes.logo} />
+                  </Button>
+                </Grid>
+                <Grid item>{matches ? drawer : tabs}</Grid>
+                <Grid item>
+                  <Button className={classes.signinbutton} variant="outlined">
+                    Sign In
+                  </Button>
                 </Grid>
               </Grid>
 
@@ -347,50 +346,49 @@ export default function Header(props) {
                 <Box
                   component="div"
                   visibility="visible"
-                  display={openBanner ? "block" : "none"}>
-                  <Grid
-                    container
-                    className={classes.banner}
-                    justify="space-between"
-                    direction="row">
-                    <Grid item md={6}>
+                  display={openBanner && !matches ? "block" : "none"}>
+                  <Container>
+                    <Grid
+                      container
+                      className={classes.banner}
+                      justify="space-between"
+                      direction="row">
                       <Grid
+                        item
                         container
                         direction="column"
                         justify="center"
                         alignItems="flex-start"
-                        spacing={5}
-                        className={classes.leftColumn}>
-                        <Grid item>
+                        md={6}
+                        spacing={6}>
+                        <Grid item style={{ width: "31rem" }}>
                           <Typography variant="h3">
                             <b>Skilltransfers</b> delivers <b>In-Person</b>{" "}
                             training for ambitious <b>Full Stack Tester</b>
                           </Typography>
                         </Grid>
 
-                        <Grid item>
-                          <form noValidate autoComplete="off">
+                        <Grid item container>
+                          <Grid item sm={7}>
                             <TextField
                               InputProps={{ disableUnderline: true }}
                               id="outlined-basic"
-                              size="medium"
                               className={classes.textfield}
                             />
-                            <Button
-                              color="inherit"
-                              size="large"
-                              className={classes.bannerbutton}>
+                          </Grid>
+                          <Grid item sm={5}>
+                            <Button className={classes.bannerbutton}>
                               Find Your Skill
                             </Button>
-                          </form>
+                          </Grid>
                         </Grid>
                       </Grid>
-                    </Grid>
 
-                    <Grid item md={6}>
-                      <img src={imageGroup} alt="banner" />
+                      <Grid item md={6}>
+                        <img src={imageGroup} alt="banner" width={"100%"} />
+                      </Grid>
                     </Grid>
-                  </Grid>
+                  </Container>
                 </Box>
               </Grid>
             </Grid>
