@@ -10,7 +10,12 @@ import { Grid, Hidden, Typography, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-  footer: { backgroundColor: theme.palette.common.blue, width: "100%" },
+  footer: {
+    backgroundColor: theme.palette.common.blue,
+    width: "100%",
+    zIndex: 1302,
+    position: "relative",
+  },
   privacy: {
     backgroundColor: theme.palette.common.darkblue,
   },

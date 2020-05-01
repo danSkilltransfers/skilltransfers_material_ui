@@ -118,6 +118,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+//takes care of hiding the header
 function HideOnScroll(props) {
   const { children, window } = props;
   const trigger = useScrollTrigger({ target: window ? window() : undefined });
@@ -135,26 +136,30 @@ export default function Header(props) {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openBanner, setOpenBanner] = useState(false);
 
+  //takes care of index of tabs
   const handleTabsChange = (e, newValue) => {
     props.setValue(newValue);
     setOpenBanner(false);
   };
+  // takes care of opening the menu and selecting the menu item
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
     setOpenMenu(true);
   };
-
+  // takes care of closing the menu and closing the menu item
   const handleClose = (e) => {
     setAnchorEl(null);
     setOpenMenu(false);
   };
-
+  // handles the menu items and opens the banner
   const handleMenuItemClick = (e, i) => {
     setAnchorEl(null);
     setOpenMenu(false);
     setOpenBanner(true);
     props.setSelectedIndex(i);
   };
+  //s meant to stop default behaviors like clicking a checkbox to check it,
+  //hitting a button to submit a form, and hitting left arrow to move the cursor in a text input
   function handleListKeyDown(event) {
     if (event.key === "Tab") {
       event.preventDefault();
@@ -173,7 +178,10 @@ export default function Header(props) {
       name: "Courses",
       link: "/courses",
       activeIndex: 1,
+      //ariaOwns identifies an element
+      //anchorEl is an element inside the menu
       ariaOwns: anchorEl ? "courses-menu" : undefined,
+      //  ariaHaspopup indicates the availability and type of interactive popup element
       ariaHaspopup: anchorEl ? "true" : undefined,
       onMouseOver: (e) => handleClick(e),
     },
@@ -331,7 +339,10 @@ export default function Header(props) {
                   <Button
                     component={Link}
                     to="/landing"
-                    onClick={() => props.setValue(null)}>
+                    onClick={() => {
+                      props.setValue(null);
+                      setOpenBanner(false);
+                    }}>
                     <img src={logo} alt="logo" className={classes.logo} />
                   </Button>
                 </Grid>
