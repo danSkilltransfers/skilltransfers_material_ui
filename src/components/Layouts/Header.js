@@ -36,10 +36,12 @@ import imageGroup from "../../assets/imageGroup.png";
 
 const useStyles = makeStyles((theme) => ({
   toolbarMargin: {
-    ...theme.mixins.toolbar,
-    marginBottom: "2rem",
-    [theme.breakpoints.down("sm")]: { marginBottom: ".7rem" },
-    [theme.breakpoints.down("xs")]: { marginBottom: ".5rem" },
+    height: "5em",
+    [theme.breakpoints.down("sm")]: { height: "4rem" },
+    // ...theme.mixins.toolbar,
+    // marginBottom: "2rem",
+    // [theme.breakpoints.down("sm")]: { marginBottom: ".7rem" },
+    // [theme.breakpoints.down("xs")]: { marginBottom: ".5rem" },
   },
   logo: {
     height: "3em",
@@ -133,7 +135,7 @@ export default function Header(props) {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openBanner, setOpenBanner] = useState(false);
 
-  const handleChange = (e, newValue) => {
+  const handleTabsChange = (e, newValue) => {
     props.setValue(newValue);
     setOpenBanner(false);
   };
@@ -181,7 +183,7 @@ export default function Header(props) {
 
   const tabs = (
     <>
-      <Tabs value={props.value} onChange={handleChange}>
+      <Tabs value={props.value} onChange={handleTabsChange}>
         {routes.map((route) => (
           <Tab
             key={`${route.name}`}
@@ -399,8 +401,25 @@ export default function Header(props) {
             </Grid>
           </Container>
         </AppBar>
+        {/* <Box
+          component="div"
+          visibility="hidden"
+          display={openBanner ? "block" : "none"}
+          height={"30rem"}
+        /> */}
       </HideOnScroll>
-      <div className={classes.toolbarMargin} />
+      <div
+        className={classes.toolbarMargin}
+        style={{ height: openBanner && !matches ? "35rem" : undefined }}
+      />
+      {/* <Box
+        component="div"
+        visibility="visible"
+        display={openBanner ? "block" : "none"}
+        style={{
+          height: "30rem",
+        }}
+      /> */}
     </>
   );
 }
