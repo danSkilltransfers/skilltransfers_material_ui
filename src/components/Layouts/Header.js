@@ -94,6 +94,7 @@ const useStyles = makeStyles((theme) => ({
   banner: {
     height: "30rem",
   },
+  searchfield: { width: "31rem", paddingTop: "4rem" },
 
   textfield: {
     backgroundColor: theme.palette.common.white,
@@ -293,9 +294,7 @@ export default function Header(props) {
             }
           }
           break;
-        case "/landing":
-          props.setValue(5);
-          break;
+
         default:
           break;
       }
@@ -330,7 +329,7 @@ export default function Header(props) {
                   <Button
                     component={Link}
                     to="/landing"
-                    onClick={() => props.setValue(5)}>
+                    onClick={() => props.setValue(null)}>
                     <img src={logo} alt="logo" className={classes.logo} />
                   </Button>
                 </Grid>
@@ -358,17 +357,23 @@ export default function Header(props) {
                         container
                         direction="column"
                         justify="center"
-                        alignItems="flex-start"
-                        md={6}
-                        spacing={6}>
+                        alignItems="center"
+                        md={6}>
                         <Grid item style={{ width: "31rem" }}>
                           <Typography variant="h3">
                             <b>Skilltransfers</b> delivers <b>In-Person</b>{" "}
-                            training for ambitious <b>Full Stack Tester</b>
+                            <br />
+                            training for ambitious <br />
+                            <b>
+                              Full Stack{" "}
+                              {window.location.pathname === "/tester"
+                                ? "Testers"
+                                : "Developers"}
+                            </b>
                           </Typography>
                         </Grid>
 
-                        <Grid item container>
+                        <Grid item container className={classes.searchfield}>
                           <Grid item sm={7}>
                             <TextField
                               InputProps={{ disableUnderline: true }}
@@ -376,7 +381,7 @@ export default function Header(props) {
                               className={classes.textfield}
                             />
                           </Grid>
-                          <Grid item sm={5}>
+                          <Grid item sm={4}>
                             <Button className={classes.bannerbutton}>
                               Find Your Skill
                             </Button>
